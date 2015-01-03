@@ -22,7 +22,7 @@
 module OpenSCADPolyhedron
 import Base.append!
 
-export Point3, Polyhedron, stringify, generatePolyhedron
+export Point3, Polyhedron, stringify, generatePolyhedron, expandSymmetries
 
 #-------------------------------------------------------------------------------
 type Point3{T<:Real}
@@ -97,6 +97,26 @@ function generatePolyhedron{T} (p::Polyhedron{T}, transforms::Array{Function}, s
     end
   end
   return result
+end
+
+#-------------------------------------------------------------------------------
+# This function allows more complicated shapes to be built up from simpler ones
+function expandSymmetries (fundamentalSymmetries::Dict{(Int, Int), (Int, Int)}, fundamentalFace::Array{Int,1}, layers::Set{Array{Int,1}})
+  symmetries = Dict{(Int, Int), (Int, Int)}()
+  for layer in layers
+    # build point lookup table
+    lookup = Dict{Int, Int}()
+    for i::Int in 1:length(fundamentalFace)
+      lookup[fundamentalFace[i]] = layer[i]
+    end
+
+    # build new symmetries
+    for ((t1, p1), (t2, p2)) in fundamentalSymmetries
+      symmetries[(t1, lookup[p1])] = (t2, lookup[p2])
+    end
+  end
+
+  return symmetries
 end
 
 end
