@@ -10,7 +10,7 @@
 #-------------------------------------------------------------------------------
 module OpenSCADCube
 using OpenSCADPolyhedron
-export cubePoints, cubeBase, cubeTransforms, cubeSymmetries
+export cubePoints, cubeFace, cubeBase, cubeTransforms, cubeSymmetries
 
 #-------------------------------------------------------------------------------
 # To start, we need the points and face of one square of a cube.
@@ -21,7 +21,8 @@ cubePoints = [
   Point3{Float64}([ 1.0, -1.0, -1.0]),
 ]
 cubeBase = Polyhedron{Float64}(cubePoints)
-append!(cubeBase, Int[1, 2, 3, 4])
+cubeFace = Int[1, 2, 3, 4]
+append!(cubeBase, cubeFace)
 
 # These six transformations generate the six faces of a cube.
 cubeTransforms = Function[
