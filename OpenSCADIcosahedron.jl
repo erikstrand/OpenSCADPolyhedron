@@ -8,8 +8,8 @@
 
 #-------------------------------------------------------------------------------
 module OpenSCADIcosahedron
-using lampahedron
-export icosahedronPoints, icosahedronBase, icosahedronTransforms, icosahedronSymmetries
+using OpenSCADPolyhedron
+export icosahedronPoints, icosahedronFace, icosahedronBase, icosahedronTransforms, icosahedronSymmetries
 
 #-------------------------------------------------------------------------------
 # We start with the top face (our icosahedron will have its top and bottom faces
@@ -20,7 +20,8 @@ icosahedronPoints = [
   Point3{Float64}([ 1., -0.57735, 1.51152]),
 ]
 icosahedronBase = Polyhedron{Float64}(icosahedronPoints)
-append!(icosahedronBase, Int[1, 2, 3])
+icosahedronFace = Int[1, 2, 3]
+append!(icosahedronBase, icosahedronFace)
 
 icosahedronTransforms = Function[
   #Group 1 ("top 5")
@@ -50,6 +51,7 @@ icosahedronTransforms = Function[
 ]
 
 icosahedronSymmetries = [
+  #Group 1
   (2,  1) => (1, 1),
   (2,  3) => (1, 2),
   (3,  1) => (1, 1),
@@ -59,6 +61,7 @@ icosahedronSymmetries = [
   (5,  1) => (1, 1),
   (5,  3) => (4, 2),
   (5,  2) => (1, 3),
+  # Group 2
   (7,  1) => (6, 2),
   (7,  3) => (6, 3),
   (8,  1) => (7, 2),
@@ -68,42 +71,44 @@ icosahedronSymmetries = [
   (10, 1) => (9, 2),
   (10, 3) => (6, 3),
   (10, 2) => (6, 1),
-  (11, 1) => (8, 2),
-  (11, 2) => (1, 2),
-  (11, 3) => (9, 2),
-  (12, 1) => (9, 2),
-  (12, 2) => (2, 2),
-  (12, 3) => (6, 1),
-  (13, 1) => (6, 1),
-  (13, 2) => (3, 2),
-  (13, 3) => (6, 2),
-  (14, 1) => (6, 2),
-  (14, 2) => (4, 2),
-  (14, 3) => (7, 2),
-  (15, 1) => (7, 2),
-  (15, 2) => (1, 3),
-  (15, 3) => (8, 2),
-  (16, 1) => (1, 3),
+  # Group 3
+  (16, 1) => (8, 2),
   (16, 2) => (1, 2),
-  (16, 3) => (8, 2),
-  (17, 1) => (1, 2),
+  (16, 3) => (9, 2),
+  (17, 1) => (9, 2),
   (17, 2) => (2, 2),
-  (17, 3) => (9, 2),
-  (18, 1) => (2, 2),
+  (17, 3) => (6, 1),
+  (18, 1) => (6, 1),
   (18, 2) => (3, 2),
-  (18, 3) => (6, 1),
-  (19, 1) => (3, 2),
+  (18, 3) => (6, 2),
+  (19, 1) => (6, 2),
   (19, 2) => (4, 2),
-  (19, 3) => (6, 2),
-  (20, 1) => (4, 2),
+  (19, 3) => (7, 2),
+  (20, 1) => (7, 2),
   (20, 2) => (1, 3),
-  (20, 3) => (7, 2)
+  (20, 3) => (8, 2),
+  # Group 4
+  (11, 1) => (1, 3),
+  (11, 2) => (1, 2),
+  (11, 3) => (8, 2),
+  (12, 1) => (1, 2),
+  (12, 2) => (2, 2),
+  (12, 3) => (9, 2),
+  (13, 1) => (2, 2),
+  (13, 2) => (3, 2),
+  (13, 3) => (6, 1),
+  (14, 1) => (3, 2),
+  (14, 2) => (4, 2),
+  (14, 3) => (6, 2),
+  (15, 1) => (4, 2),
+  (15, 2) => (1, 3),
+  (15, 3) => (7, 2),
 ]
 
 #-------------------------------------------------------------------------------
 # Build the icosahedron polygon.
 icosahedron = generatePolyhedron(icosahedronBase, icosahedronTransforms, icosahedronSymmetries)
-println(stringify(icosahedron))
+#println(stringify(icosahedron))
 
 
 #-------------------------------------------------------------------------------
